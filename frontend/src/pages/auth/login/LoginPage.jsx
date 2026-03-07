@@ -22,7 +22,7 @@ const LoginPage = () => {
     error,
   } = useMutation({
     mutationFn: async ({ username, password }) => {
-      const res = await fetch("http://localhost:3002/api/auth/login", {
+      const res = await fetch("https://twitter-clone-3-dzoz.onrender.com/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
