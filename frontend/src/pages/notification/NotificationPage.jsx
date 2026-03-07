@@ -15,7 +15,7 @@ const NotificationPage = () => {
 	const { data: notifications, isLoading } = useQuery({
 		queryKey: ["notifications"],
 		queryFn: async () => {
-			const res = await fetch("http://localhost:3002/api/notifications", {
+			const res = await fetch("https://twitter-clone-3-dzoz.onrender.com/api/notifications", {
 				credentials: "include", // ⭐ IMPORTANT
 			});
 
@@ -28,7 +28,7 @@ const NotificationPage = () => {
 	// DELETE ALL NOTIFICATIONS
 	const { mutate: deleteNotifications } = useMutation({
 		mutationFn: async () => {
-			const res = await fetch("http://localhost:3002/api/notifications", {
+			const res = await fetch("https://twitter-clone-3-dzoz.onrender.com/api/notifications", {
 				method: "DELETE",
 				credentials: "include", // ⭐ IMPORTANT
 			});
