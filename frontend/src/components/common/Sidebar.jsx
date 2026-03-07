@@ -46,16 +46,10 @@ const Sidebar = () => {
       return data;
     },
 
-   onSuccess: async () => {
+  onSuccess: () => {
   toast.success("Logged out successfully");
 
-  // remove cached queries completely
-  queryClient.removeQueries({ queryKey: ["authUser"] });
-  queryClient.removeQueries({ queryKey: ["suggestedUsers"] });
-
-  // set them empty
-  queryClient.setQueryData(["authUser"], null);
-  queryClient.setQueryData(["suggestedUsers"], []);
+  queryClient.clear(); // clears all cached queries
 
   navigate("/login");
 },
