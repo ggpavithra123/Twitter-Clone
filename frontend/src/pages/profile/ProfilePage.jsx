@@ -32,7 +32,7 @@ const ProfilePage = () => {
   const { data: authUser } = useQuery({
     queryKey: ["authUser"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:3002/api/auth/me", {
+      const res = await fetch("https://twitter-clone-3-dzoz.onrender.com/api/auth/me", {
         credentials: "include",
       });
       if (!res.ok) return null;
@@ -50,7 +50,7 @@ const ProfilePage = () => {
   } = useQuery({
     queryKey: ["userProfile", username],
     queryFn: async () => {
-      const res = await fetch(`http://localhost:3002/api/users/profile/${username}`, {
+      const res = await fetch(`https://twitter-clone-3-dzoz.onrender.com/api/users/profile/${username}`, {
         credentials: "include",
       });
       const data = await res.json();
