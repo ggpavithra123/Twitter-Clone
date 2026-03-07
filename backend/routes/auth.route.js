@@ -12,8 +12,6 @@ router.post("/signup", signup);
 router.post("/login", login);
 router.post("/logout", logout);
 // ✔ Return logged in user
-router.get("/me", protectRoute, (req, res) => {
-   res.status(200).json(req.user);
-});
+router.get("/me", protectRoute, getMe);
 
 export default router;
