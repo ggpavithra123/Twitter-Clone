@@ -20,7 +20,7 @@ const Post = ({ post }) => {
   const { data: authUser, isLoading: authLoading } = useQuery({
     queryKey: ["authUser"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:3002/api/auth/me", {
+      const res = await fetch("https://twitter-clone-3-dzoz.onrender.com/api/auth/me", {
         method: "GET",
         credentials: "include",
       });
@@ -35,7 +35,7 @@ const Post = ({ post }) => {
   // --------------------------
   const deletePostMutation = useMutation({
     mutationFn: async () => {
-      const res = await fetch(`http://localhost:3002/api/posts/${post._id}`, {
+      const res = await fetch(`https://twitter-clone-3-dzoz.onrender.com/api/posts/${post._id}`, {
         method: "DELETE",
         credentials: "include",
       });
@@ -52,7 +52,7 @@ const Post = ({ post }) => {
 
   const likePostMutation = useMutation({
     mutationFn: async () => {
-      const res = await fetch(`http://localhost:3002/api/posts/like/${post._id}`, {
+      const res = await fetch(`https://twitter-clone-3-dzoz.onrender.com/api/posts/like/${post._id}`, {
         method: "POST",
         credentials: "include",
       });
@@ -88,7 +88,7 @@ const Post = ({ post }) => {
 
   const commentPostMutation = useMutation({
     mutationFn: async () => {
-      const res = await fetch(`http://localhost:3002/api/posts/comment/${post._id}`, {
+      const res = await fetch(`https://twitter-clone-3-dzoz.onrender.com/api/posts/comment/${post._id}`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },

@@ -40,7 +40,7 @@ const PORT = process.env.PORT || 3002;
 
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://twitter-1nvn.vercel.app/", "https://twitter-3yrj.vercel.app/"],
+    origin: ["http://localhost:3000", "https://twitter-clone-delta-eight-50.vercel.app", "https://twitter-3yrj.vercel.app/"],
     credentials: true,
   })
 );

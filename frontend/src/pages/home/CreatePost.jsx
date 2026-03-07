@@ -14,7 +14,7 @@ const CreatePost = () => {
   const { data: authUser } = useQuery({
     queryKey: ["authUser"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:3002/api/auth/me", {
+      const res = await fetch("https://twitter-clone-3-dzoz.onrender.com/api/auth/me", {
         credentials: "include",
       });
 
@@ -30,7 +30,7 @@ const CreatePost = () => {
   // ================= CREATE POST =================
   const { mutate: createPost, isPending, isError, error } = useMutation({
     mutationFn: async ({ text, img }) => {
-      const res = await fetch("http://localhost:3002/api/posts/create", {
+      const res = await fetch("https://twitter-clone-3-dzoz.onrender.com/api/posts/create", {
         method: "POST",
         credentials: "include", // IMPORTANT for sending JWT cookie
         headers: {

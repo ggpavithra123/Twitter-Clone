@@ -18,7 +18,7 @@ const Sidebar = () => {
   const { data: authUser } = useQuery({
     queryKey: ["authUser"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:3002/api/auth/me", {
+      const res = await fetch("https://twitter-clone-3-dzoz.onrender.com/api/auth/me", {
         credentials: "include",
       });
 
@@ -32,7 +32,7 @@ const Sidebar = () => {
   // ---------------- LOGOUT MUTATION ----------------
   const { mutate: logout, isPending } = useMutation({
     mutationFn: async () => {
-      const res = await fetch("http://localhost:3002/api/auth/logout", {
+      const res = await fetch("https://twitter-clone-3-dzoz.onrender.com/api/auth/logout", {
         method: "POST",
         credentials: "include",
       });
@@ -46,21 +46,13 @@ const Sidebar = () => {
       return data;
     },
 
-    onSuccess: () => {
+  onSuccess: () => {
   toast.success("Logged out successfully");
 
-  // clear auth user
-  queryClient.setQueryData(["authUser"], null);
-
-  // clear who to follow users
-  queryClient.setQueryData(["suggestedUsers"], []);
-
-  // optional: remove cache completely
-  queryClient.removeQueries(["suggestedUsers"]);
+  queryClient.clear(); // clears all cached queries
 
   navigate("/login");
 },
-
     onError: (error) => {
       toast.error(error.message || "Logout failed");
     },
@@ -136,7 +128,7 @@ const Sidebar = () => {
               </p>
             </div>
 
-            {/* Logout Icon */}
+            {/* Logout Icon  */}
             <BiLogOut
               className="w-5 h-5 cursor-pointer"
               onClick={() => logout()}

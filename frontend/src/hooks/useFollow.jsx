@@ -7,7 +7,7 @@ const useFollow = () => {
 	const { mutate: follow, isPending } = useMutation({
 		mutationFn: async (userId) => {
 			try {
-				const res = await fetch(`http://localhost:3002/api/users/follow/${userId}`, {
+				const res = await fetch(`https://twitter-clone-3-dzoz.onrender.com/api/users/follow/${userId}`, {
 					method: "POST",
 					credentials: "include", // ⭐ REQUIRED FOR JWT COOKIE
 				});
