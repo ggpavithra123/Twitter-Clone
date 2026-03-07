@@ -4,15 +4,17 @@ import { MdHomeFilled } from "react-icons/md";
 import { IoNotifications } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
 import { BiLogOut } from "react-icons/bi";
-import { Link } from "react-router-dom";
+
+import { Link, useNavigate } from "react-router-dom";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 const Sidebar = () => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
-  // ---------------- GET LOGGED-IN USER ------------------
+  // ---------------- GET LOGGED-IN USER ----------------
   const { data: authUser } = useQuery({
     queryKey: ["authUser"],
     queryFn: async () => {
@@ -27,8 +29,8 @@ const Sidebar = () => {
 
   console.log("AUTH USER =>", authUser);
 
-  // ---------------- LOGOUT MUTATION ------------------
-  const { mutate: logout } = useMutation({
+  // ---------------- LOGOUT MUTATION ----------------
+  const { mutate: logout, isPending } = useMutation({
     mutationFn: async () => {
       const res = await fetch("http://localhost:3002/api/auth/logout", {
         method: "POST",
@@ -36,21 +38,38 @@ const Sidebar = () => {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Logout failed");
+
+      if (!res.ok) {
+        throw new Error(data.error || "Logout failed");
+      }
+
+      return data;
     },
+
     onSuccess: () => {
-      toast.success("Logged out");
-      queryClient.invalidateQueries(["authUser"]);
-    },
-    onError: () => {
-      toast.error("Logout failed");
+  toast.success("Logged out successfully");
+
+  // clear auth user
+  queryClient.setQueryData(["authUser"], null);
+
+  // clear who to follow users
+  queryClient.setQueryData(["suggestedUsers"], []);
+
+  // optional: remove cache completely
+  queryClient.removeQueries(["suggestedUsers"]);
+
+  navigate("/login");
+},
+
+    onError: (error) => {
+      toast.error(error.message || "Logout failed");
     },
   });
 
   return (
     <div className="md:flex-[2_2_0] w-18 max-w-52">
       <div className="sticky top-0 left-0 h-screen flex flex-col border-r border-gray-700 w-20 md:w-full">
-        
+
         {/* Logo */}
         <Link to="/" className="flex justify-center md:justify-start">
           <XSvg className="px-2 w-12 h-12 rounded-full fill-white hover:bg-stone-900" />
@@ -58,6 +77,8 @@ const Sidebar = () => {
 
         {/* Navigation */}
         <ul className="flex flex-col gap-3 mt-4">
+
+          {/* Home */}
           <li className="flex justify-center md:justify-start">
             <Link
               to="/"
@@ -68,6 +89,7 @@ const Sidebar = () => {
             </Link>
           </li>
 
+          {/* Notifications */}
           <li className="flex justify-center md:justify-start">
             <Link
               to="/notifications"
@@ -78,6 +100,7 @@ const Sidebar = () => {
             </Link>
           </li>
 
+          {/* Profile */}
           <li className="flex justify-center md:justify-start">
             <Link
               to={`/profile/${authUser?.username || ""}`}
@@ -89,12 +112,11 @@ const Sidebar = () => {
           </li>
         </ul>
 
-        {/* ---------------- USER + LOGOUT BUTTON ---------------- */}
+        {/* ---------------- USER INFO + LOGOUT ---------------- */}
         {authUser && (
-          <div
-            className="mt-auto mb-10 flex gap-2 items-center transition-all duration-300 hover:bg-[#181818] py-2 px-4 rounded-full cursor-pointer"
-          >
-            {/* User Avatar */}
+          <div className="mt-auto mb-10 flex gap-2 items-center transition-all duration-300 hover:bg-[#181818] py-2 px-4 rounded-full cursor-pointer">
+
+            {/* Avatar */}
             <div className="avatar hidden md:inline-flex">
               <div className="w-8 rounded-full">
                 <img
@@ -104,12 +126,14 @@ const Sidebar = () => {
               </div>
             </div>
 
-            {/* User Info */}
+            {/* User Details */}
             <div className="hidden md:flex flex-col flex-1">
               <p className="text-white font-bold text-sm truncate">
                 {authUser.fullName}
               </p>
-              <p className="text-slate-500 text-sm">@{authUser.username}</p>
+              <p className="text-slate-500 text-sm">
+                @{authUser.username}
+              </p>
             </div>
 
             {/* Logout Icon */}
@@ -117,6 +141,12 @@ const Sidebar = () => {
               className="w-5 h-5 cursor-pointer"
               onClick={() => logout()}
             />
+
+            {isPending && (
+              <span className="text-xs text-gray-400 ml-2">
+                Logging out...
+              </span>
+            )}
           </div>
         )}
       </div>
@@ -125,3 +155,4 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
+

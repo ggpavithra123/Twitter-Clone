@@ -2,41 +2,87 @@
 import Post from "../models/post.model.js";
 import User from "../models/user.model.js";
 import Notification from "../models/notification.model.js";
-import { v2 as cloudinary } from "cloudinary";
+//import { v2 as cloudinary } from "cloudinary";
+import cloudinary from "../config/cloudinary.js";
 
-export const createPost = async(req, res) => {
-    try {
-        const {text} = req.body;
-        let {img } = req.body;
-        const userId = req.user._id.toString();
+export const createPost = async (req, res) => {
+  try {
 
-        const user = await User.findOne({_id:userId});
-        if(!user){
-            return res.status(404).json({message: "User not found"});
-        }
-        if(!text && !img){
-            return res.status(400).json({message: "Post content cannot be empty"});
-        }
-        if(img){
-            const uploadResponse = await cloudinary.uploader.upload(img);           
-            img = uploadResponse.secure_url;
-        }
-        const newPost = new Post({
-            user: userId,
-            text, 
-            img
-        });
+    console.log("===== CREATE POST START =====");
 
-        await newPost.save();
-        res.status(201).json({message: "Post created successfully", post: newPost});
-        //return res.status(201).json({message: "Post created successfully", post: newPost}
-        //)
-               
-    } catch (error) {
-        console.log(`Error in createPost controller: ${error}`);   
-        res.status(500).json({ message: "Internal Server error" });     
+    const { text } = req.body;
+    let { img } = req.body;
+
+    console.log("Request body:", req.body);
+    console.log("Image received:", img ? "YES" : "NO");
+
+    console.log("User from token:", req.user);
+
+    const userId = req.user._id.toString();
+    console.log("User ID:", userId);
+
+    // Check ENV variables
+    console.log("Cloudinary ENV CHECK:");
+    console.log("CLOUDINARY_CLOUD_NAME:", process.env.CLOUDINARY_CLOUD_NAME);
+    console.log("CLOUDINARY_API_KEY:", process.env.CLOUDINARY_API_KEY);
+    console.log("CLOUDINARY_API_SECRET:", process.env.CLOUDINARY_API_SECRET);
+
+    const user = await User.findOne({ _id: userId });
+
+    if (!user) {
+      console.log("User not found");
+      return res.status(404).json({ message: "User not found" });
     }
-}
+
+    if (!text && !img) {
+      console.log("Post content empty");
+      return res.status(400).json({ message: "Post content cannot be empty" });
+    }
+
+    // Upload image
+    if (img) {
+
+      console.log("Uploading image to Cloudinary...");
+
+      const uploadResponse = await cloudinary.uploader.upload(img);
+
+      console.log("Cloudinary response:", uploadResponse);
+
+      img = uploadResponse.secure_url;
+
+      console.log("Uploaded image URL:", img);
+    }
+
+    const newPost = new Post({
+      user: userId,
+      text,
+      img
+    });
+
+    console.log("Saving post to database...");
+
+    await newPost.save();
+
+    console.log("Post saved successfully:", newPost);
+
+    res.status(201).json({
+      message: "Post created successfully",
+      post: newPost
+    });
+
+  } catch (error) {
+
+    console.log("===== CREATE POST ERROR =====");
+    console.log("Error:", error);
+    console.log("Error message:", error.message);
+    console.log("Stack:", error.stack);
+
+    res.status(500).json({
+      message: "Internal Server error",
+      error: error.message
+    });
+  }
+};
 
 export const deletePost = async (req, res) => {
 	try {
