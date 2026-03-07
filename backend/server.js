@@ -40,7 +40,11 @@ const PORT = process.env.PORT || 3002;
 
 app.use(
   cors({
+<<<<<<< HEAD
     origin: ["http://localhost:3000"],
+=======
+    origin: ["http://localhost:3000","https://twitter-1nvn.vercel.app/","https://twitter-3yrj.vercel.app/"],
+>>>>>>> 51172a764e02396d3674a038cac7a530cdd1e068
     credentials: true,
   })
 );
