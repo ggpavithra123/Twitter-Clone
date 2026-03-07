@@ -136,7 +136,7 @@ const Sidebar = () => {
               </p>
             </div>
 
-            {/* Logout Icon */}
+            {/* Logout Icon  */}
             <BiLogOut
               className="w-5 h-5 cursor-pointer"
               onClick={() => logout()}
