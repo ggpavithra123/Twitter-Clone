@@ -8,18 +8,18 @@ const Posts = ({ feedType, username, userId }) => {
 	// Decide API Endpoint (memoized)
 	// --------------------------
 	const POST_ENDPOINT = useMemo(() => {
-		let endpoint = "http://localhost:3002/api/posts/all";
+		let endpoint = "https://twitter-clone-3-dzoz.onrender.com/api/posts/all";
 
 		if (feedType === "following") {
-			endpoint = "http://localhost:3002/api/posts/following";
+			endpoint = "https://twitter-clone-3-dzoz.onrender.com/api/posts/following";
 		}
 
 		if (feedType === "posts" && username) {
-			endpoint = `http://localhost:3002/api/posts/user/${username}`;
+			endpoint = `https://twitter-clone-3-dzoz.onrender.com/api/posts/user/${username}`;
 		}
 
 		if (feedType === "likes" && userId) {
-			endpoint = `http://localhost:3002/api/posts/likes/${userId}`;
+			endpoint = `https://twitter-clone-3-dzoz.onrender.com/api/posts/likes/${userId}`;
 		}
 
 		console.log("📡 Fetching posts from:", endpoint);
@@ -61,7 +61,7 @@ const Posts = ({ feedType, username, userId }) => {
 		console.log("➡️ Like button clicked for post:", postId);
 
 		try {
-			const res = await fetch(`http://localhost:3002/api/posts/like/${postId}`, {
+			const res = await fetch(`https://twitter-clone-3-dzoz.onrender.com/api/posts/like/${postId}`, {
 				method: "POST",
 				credentials: "include",
 				headers: {
