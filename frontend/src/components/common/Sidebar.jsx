@@ -18,7 +18,7 @@ const Sidebar = () => {
   const { data: authUser } = useQuery({
     queryKey: ["authUser"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:3002/api/auth/me", {
+      const res = await fetch("https://twitter-clone-3-dzoz.onrender.com/api/auth/me", {
         credentials: "include",
       });
 
@@ -32,7 +32,7 @@ const Sidebar = () => {
   // ---------------- LOGOUT MUTATION ----------------
   const { mutate: logout, isPending } = useMutation({
     mutationFn: async () => {
-      const res = await fetch("http://localhost:3002/api/auth/logout", {
+      const res = await fetch("https://twitter-clone-3-dzoz.onrender.com/api/auth/logout", {
         method: "POST",
         credentials: "include",
       });
